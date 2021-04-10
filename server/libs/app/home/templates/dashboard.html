@@ -1,3 +1,17 @@
+{% macro card(name, icon, id) -%}
+<!-- <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4">
+    <div id="effect_off" class="card m-auto h-100 {{ id }}">
+        <div class="card-block text-center">
+            {{ icon|safe }}
+            <p class="mt-4 mb-0">{{ name }}</p>
+        </div>
+    </div>
+</div> -->
+<div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4">
+    <button id="{{ id }}" class="btn btn-lg btn-block bg-white btn-light shadow-sm p-4 dashboard_effect">{{ icon|safe }} <span class="text-secondary">{{ name }}</span></button>
+</div>
+{%- endmacro %}
+
 {% extends "layouts/base.html" %}
 
 {% block title %} Dashboard {% endblock %}
@@ -7,21 +21,34 @@
 
 {% block content %}
 
-    <div class="pcoded-content">
-        <div class="pcoded-inner-content">
-            <!-- [ breadcrumb ] start -->
+    <div class="row">
+        <div class="col">
 
-            <!-- [ breadcrumb ] end -->
             <div class="main-body">
                 <div class="page-wrapper" id="dashboard-item-list" >
                     <!-- [ Main Content ] start -->
 
-                    <div class="h3 text-secondary">Dashboard</div>
+                    <!-- <div class="h3 text-secondary">Dashboard</div> -->
 
                     {% include 'includes/devices.html' %}
 
+                    <h3 class="text-secondary">Special Effects</h3>
+                    <div class="row">
+                        {{ card("Off", '<i class="fas fa-2x fa-power-off d-block text-secondary my-2" aria-hidden="true"></i>', "effect_off") }}
+                    </div>
+
+                    <h3 class="text-secondary">All Effects</h3>
+                    <div class="row">
+                        {% for effect in effectlist|sort %}
+                        {% set effect_name = effect.split("effect_")[1].split(".")[0]|replace("_", " ")|title %}
+                        {% set effect_id = effect.split(".")[0] %}
+                        {{ card(effect_name, '<i class="far fa-2x fa-lightbulb d-block text-secondary my-2" aria-hidden="true"></i>', effect_id) }}
+                        {% endfor %}
+                    </div>
+
                     <div class="h3 text-secondary">Special Effects</div>
                     <div id="dashboard-list-special" class="row h1 text-secondary">
+
                         <!-- Effect Off -->
                         <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4">
                             <div id="effect_off" class="card m-auto h-100 dashboard_effect">

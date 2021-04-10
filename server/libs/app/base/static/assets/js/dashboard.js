@@ -9,7 +9,12 @@ var hardcodedSec = 10;
 
 // Init and load all settings
 $(document).ready(function () {
-    GetDevices();
+
+    $.ajax({ url: "/GetDevices" })
+        .done(( data ) => {
+            ParseDevices(data);
+        });
+
     GetActiveEffect(currentDevice);
     initTimerWorker();
 
@@ -59,22 +64,20 @@ function getRandomEffect(effects) {
     return randomEffect;
 }
 
-function GetDevices() {
-    $.ajax({
-        url: "/GetDevices",
-        type: "GET",
-        success: function (response) {
-            ParseDevices(response);
-        },
-        error: function (xhr) {
-            // Handle error
-        }
-    });
-}
-
 function ParseDevices(devices) {
     this.currentDevice = "all_devices";
     this.devices = devices;
+
+    $(".number_devices").text(Object.keys(devices).length);
+    // cleanup previous entries
+    $("#devices_list").children().not(':first').remove();
+    console.log(devices);
+
+    Object.keys(devices).forEach(device_key => {
+        // $('#deviceTabID').append("<li class='nav-item device_item'><a class='nav-link' id=\"" + device_key + "\" data-toggle='pill' href='#pills-0' role='tab' aria-controls='pills-0' aria-selected='false'>" + devices[device_key] + "</a></li>");
+        const e = $('<div class="dropdown-divider"></div><a href="#pills-0" id="' + device_key + '" class="dropdown-item device_item"><i class="fas fa-microchip mr-2"></i></i> '+ devices[device_key] +'<span class="float-right text-muted text-sm"><#> LEDs</span></a>');
+        $('#devices_list').append(e); // put it into the DOM    
+    });
 
     this.BuildDeviceTab();
     this.AddEventListeners();
@@ -202,11 +205,11 @@ function SwitchDevice(e) {
 /* Effect Handling */
 
 function clearAllActiveEffects() {
-    $(".dashboard_effect_active").removeClass("dashboard_effect_active");
+    $(".dashboard_effect_active").removeClass("dashboard_effect_active active");
 }
 
 function setActiveStyle(currentEffect) {
-    $("#" + currentEffect).addClass("dashboard_effect_active");
+    $("#" + currentEffect).addClass("dashboard_effect_active active");
 }
 
 // Listen for effect change on click
