@@ -1,3 +1,7 @@
+server/libs/app/base/AdminLTE/
+node_modules/
+#server/libs/app/base/static/assets/package.json
+
 # byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
