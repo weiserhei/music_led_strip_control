@@ -8,11 +8,19 @@ from flask_login import login_required
 from jinja2 import TemplateNotFound
 from libs.app.home import blueprint
 
+import os
+import glob
+
+# create list of all the effects
+effects = []
+for root, dirs, files in os.walk('./libs/app/home/templates/effects'):
+    # effects += glob.glob(os.path.join(root, '*.html'))
+    effects = files
 
 @blueprint.route('/')
 @login_required
 def index():
-    return render_template('dashboard.html', segment='dashboard')
+    return render_template('dashboard.html', segment='dashboard', effectlist=effects)
 
 
 @blueprint.route('/<page>/<template>', methods=['GET', 'POST'])
@@ -22,7 +30,7 @@ def route_pages(page, template):
         if not template.endswith('.html'):
             template += '.html'
         segment = get_segment(request)
-        return render_template(f"/{page}/{template}", segment=segment)
+        return render_template(f"/{page}/{template}", segment=segment, effectlist=effects)
     except TemplateNotFound:
         return render_template('page-404.html'), 404
     except Exception:
@@ -36,7 +44,7 @@ def route_template(template):
         if not template.endswith('.html'):
             template += '.html'
         segment = get_segment(request)
-        return render_template(template, segment=segment)
+        return render_template(template, segment=segment, effectlist=effects)
     except TemplateNotFound:
         return render_template('page-404.html'), 404
     except Exception:
