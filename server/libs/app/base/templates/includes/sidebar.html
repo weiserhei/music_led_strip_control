@@ -106,6 +106,18 @@
               </li>
             {% endfor %}
             </ul>
+            <ul class="nav nav-treeview">
+            {% for effect in music_effectlist|sort %}
+            <li class="nav-item">
+                <a href="/effects/{{ effect }}" class="nav-link {{'active' if segment == effect }}">
+                  <!-- <i class="far fa-circle fa-xs nav-icon"></i> -->
+                  <span class="mr-2">&middot;</span>
+                  {% set effect_name = effect.split("effect_")[1].split(".")[0]|replace("_", " ")|title %}
+                  <p>{{ effect_name }}</p>
+                </a>
+              </li>
+            {% endfor %}
+            </ul>
           </li>
           <li class="nav-item {{ 'menu-open' if segment == 'general_settings' or segment == 'device_settings' }}">
             <a href="#" class="nav-link">

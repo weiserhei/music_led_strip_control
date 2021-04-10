@@ -12,15 +12,26 @@ import os
 import glob
 
 # create list of all the effects
-effects = []
-for root, dirs, files in os.walk('./libs/app/home/templates/effects'):
-    # effects += glob.glob(os.path.join(root, '*.html'))
-    effects = files
+# effects = []
+# for root, dirs, files in os.walk('./libs/app/home/templates/effects'):
+#     # effects += glob.glob(os.path.join(root, '*.html'))
+#     effects = files
+
+effects = [os.path.join(name)
+              for root, dirs, files in os.walk('./libs/app/home/templates/effects')
+              for name in files
+              if name.endswith((".html", ".htm"))]
+
+music_effects = [os.path.join(name)
+              for root, dirs, files in os.walk('./libs/app/home/templates/music_effects')
+              for name in files
+              if name.endswith((".html", ".htm"))]
+
 
 @blueprint.route('/')
 @login_required
 def index():
-    return render_template('dashboard.html', segment='dashboard', effectlist=effects)
+    return render_template('dashboard.html', segment='dashboard', effectlist=effects, music_effectlist=music_effects)
 
 
 @blueprint.route('/<page>/<template>', methods=['GET', 'POST'])
@@ -30,7 +41,7 @@ def route_pages(page, template):
         if not template.endswith('.html'):
             template += '.html'
         segment = get_segment(request)
-        return render_template(f"/{page}/{template}", segment=segment, effectlist=effects)
+        return render_template(f"/{page}/{template}", segment=segment, effectlist=effects, music_effectlist=music_effects)
     except TemplateNotFound:
         return render_template('page-404.html'), 404
     except Exception:
@@ -44,7 +55,7 @@ def route_template(template):
         if not template.endswith('.html'):
             template += '.html'
         segment = get_segment(request)
-        return render_template(template, segment=segment, effectlist=effects)
+        return render_template(template, segment=segment, effectlist=effects, music_effectlist=music_effects)
     except TemplateNotFound:
         return render_template('page-404.html'), 404
     except Exception:
