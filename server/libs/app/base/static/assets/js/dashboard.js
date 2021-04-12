@@ -71,13 +71,14 @@ function ParseDevices(devices) {
     $(".number_devices").text(Object.keys(devices).length);
     // cleanup previous entries
     $("#devices_list").children().not(':first').remove();
-    console.log(devices);
 
     Object.keys(devices).forEach(device_key => {
-        // $('#deviceTabID').append("<li class='nav-item device_item'><a class='nav-link' id=\"" + device_key + "\" data-toggle='pill' href='#pills-0' role='tab' aria-controls='pills-0' aria-selected='false'>" + devices[device_key] + "</a></li>");
         const e = $('<div class="dropdown-divider"></div><a href="#pills-0" id="' + device_key + '" class="dropdown-item device_item"><i class="fas fa-microchip mr-2"></i></i> '+ devices[device_key] +'<span class="float-right text-muted text-sm"><#> LEDs</span></a>');
         $('#devices_list').append(e); // put it into the DOM    
     });
+
+    const all_devices = $('<div class="dropdown-divider"></div><a href="#" id="all_devices" class="device_item dropdown-item dropdown-footer">All Devices</a>')
+    $('#devices_list').append(all_devices);
 
     this.BuildDeviceTab();
     this.AddEventListeners();
@@ -87,7 +88,7 @@ function ParseDevices(devices) {
     let lastDeviceId = localStorage.getItem("lastDevice");
     if (lastDeviceId) {
         $("#accordionDevices").addClass('d-none');
-        $("#collapseMenu").addClass('show');
+        // $("#collapseMenu").addClass('show');
         $("#" + lastDeviceId)[0].click();
         $("#accordionDevices").removeClass('d-none');
     }

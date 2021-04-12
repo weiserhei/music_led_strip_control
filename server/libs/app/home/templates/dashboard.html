@@ -1,6 +1,6 @@
 {% macro card(name, icon, id) -%}
-<div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4">
-    <button id="{{ id }}" class="dashboard_effect btn btn-lg btn-block bg-white btn-light shadow-sm p-4">{{ icon|safe }} <span class="text-secondary">{{ name }}</span></button>
+<div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3">
+    <button id="{{ id }}" class="dashboard_effect btn btn-lg btn-light btn-block shadow-sm p-4 text-md-center text-left">{{ icon|safe }} <span class="">{{ name }}</span></button>
 </div>
 {%- endmacro %}
 
@@ -24,31 +24,98 @@
 
                     {% include 'includes/devices.html' %}
 
-                    <h3 class="text-secondary">Special Effects</h3>
-                    <div class="row" id="dashboard-list-special">
-                        {{ card("Off", '<i class="fas fa-2x fa-power-off d-block text-danger my-2" aria-hidden="true"></i>', "effect_off") }}
-                        {{ card("Random Cycle", '<i class="fas fa-2x fa-hourglass-half d-block text-secondary my-2" aria-hidden="true"></i>', "effect_random_cycle") }}
-                        {{ card("Random Non-Music", '<i class="fas fa-2x fa-random d-block text-secondary my-2" aria-hidden="true"></i>', "effect_random_non_music") }}
-                        {{ card("Random Music", '<i class="fas fa-2x fa-random d-block text-secondary my-2" aria-hidden="true"></i>', "effect_random_music") }}
-                    </div>
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title">Special Effects</h3>
+                        </div>
+                        <div class="card-body">
+                        <div class="row" id="dashboard-list-special">
+                            {% set iconClasses = "mr-2 text-secondary my-2" %}
+                            {{ card("Off", '<i class="fas fa-lg fa-power-off '+iconClasses+'" aria-hidden="true"></i>', "effect_off") }}
+                            {{ card("Random Cycle", '<i class="fas fa-lg fa-hourglass-half '+iconClasses+'" aria-hidden="true"></i>', "effect_random_cycle") }}
+                            <!-- {{ card("Random Non-Music", '<i class="fas fa-lg fa-random '+iconClasses+'" aria-hidden="true"></i>', "effect_random_non_music") }} -->
+                            <!-- {{ card("Random Music", '<i class="fas fa-lg fa-random '+iconClasses+'" aria-hidden="true"></i>', "effect_random_music") }} -->
 
-                    <h3 class="text-secondary">Non-Music Effects</h3>
+                            <div class="col-sm-6 col-md-4 col-lg-6 col-xl-4 mb-2">
+                                <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+                                    <button type="button" id="effect_random_non_music" class="dashboard_effect btn btn-light shadow-sm p-4 text-md-center text-left">
+                                        <i class="fas fa-lg fa-random {{ iconClasses }}" aria-hidden="true"></i>
+                                        Random Non-Music
+                                    </button>
+                                    <button type="button" id="effect_random_music" class="dashboard_effect btn btn-light shadow-sm p-4 text-md-center text-left">
+                                        <i class="fas fa-lg fa-random {{ iconClasses }}" aria-hidden="true"></i>
+                                        Random Music
+                                    </button>
+                                </div>
+                            </div>
+                                
+
+                        </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <!-- <div class="card-footer">
+                          The footer of the card
+                        </div> -->
+                        <!-- /.card-footer -->
+                      </div>
+                      <!-- /.card -->
+
+                    <!-- <h3 class="text-secondary">Special Effects</h3>
+                    <div class="row" id="dashboard-list-special">
+                        {% set iconClasses = "mr-2 text-secondary my-2" %}
+                        {{ card("Off", '<i class="fas fa-lg fa-power-off '+iconClasses+'" aria-hidden="true"></i>', "effect_off") }}
+                        {{ card("Random Cycle", '<i class="fas fa-lg fa-hourglass-half '+iconClasses+'" aria-hidden="true"></i>', "effect_random_cycle") }}
+                        {{ card("Random Non-Music", '<i class="fas fa-lg fa-random '+iconClasses+'" aria-hidden="true"></i>', "effect_random_non_music") }}
+                        {{ card("Random Music", '<i class="fas fa-lg fa-random '+iconClasses+'" aria-hidden="true"></i>', "effect_random_music") }}
+                    </div> -->
+
+                    <div class="card">
+                        <div class="card-header">
+                          <h3 class="card-title">Non-Music Effects</h3>
+                        </div>
+                        <div class="card-body">
+                        <div class="row" id="dashboard-list-special">
+                            {% for effect in effectlist|sort %}
+                            {% set effect_name = effect.split("effect_")[1].split(".")[0]|replace("_", " ")|title %}
+                            {% set effect_id = effect.split(".")[0] %}
+                            {{ card(effect_name, '<i class="far fa-lg fa-lightbulb '+iconClasses+'" aria-hidden="true"></i>', effect_id) }}
+                            {% endfor %}
+                        </div>
+                        </div>
+                        </div>
+
+                    <!-- <h3 class="text-secondary">Non-Music Effects</h3>
                     <div class="row" id="dashboard-list-none-music">
                         {% for effect in effectlist|sort %}
                         {% set effect_name = effect.split("effect_")[1].split(".")[0]|replace("_", " ")|title %}
                         {% set effect_id = effect.split(".")[0] %}
-                        {{ card(effect_name, '<i class="far fa-2x fa-lightbulb d-block text-secondary my-2" aria-hidden="true"></i>', effect_id) }}
+                        {{ card(effect_name, '<i class="far fa-lg fa-lightbulb '+iconClasses+'" aria-hidden="true"></i>', effect_id) }}
                         {% endfor %}
-                    </div>
+                    </div> -->
 
-                    <h3 class="text-secondary">Music Effects</h3>
+                    <div class="card">
+                        <div class="card-header">
+                          <h3 class="card-title">Music Effects</h3>
+                        </div>
+                        <div class="card-body">
+                        <div class="row" id="dashboard-list-special">
+                            {% for effect in music_effectlist|sort %}
+                            {% set effect_name = effect.split("effect_")[1].split(".")[0]|replace("_", " ")|title %}
+                            {% set effect_id = effect.split(".")[0] %}
+                            {{ card(effect_name, '<i class="fas fa-lg fa-music '+iconClasses+'" aria-hidden="true"></i>', effect_id) }}
+                            {% endfor %}
+                        </div>
+                        </div>
+                        </div>
+
+                    <!-- <h3 class="text-secondary">Music Effects</h3>
                     <div class="row" id="dashboard-list-music">
                         {% for effect in music_effectlist|sort %}
                         {% set effect_name = effect.split("effect_")[1].split(".")[0]|replace("_", " ")|title %}
                         {% set effect_id = effect.split(".")[0] %}
-                        {{ card(effect_name, '<i class="fas fa-2x fa-music d-block text-secondary my-2" aria-hidden="true"></i>', effect_id) }}
+                        {{ card(effect_name, '<i class="fas fa-lg fa-music '+iconClasses+'" aria-hidden="true"></i>', effect_id) }}
                         {% endfor %}
-                    </div>
+                    </div> -->
 
                     <div class="h3 text-secondary">Special Effects</div>
                     <div id="dashboard-list-special2" class="row h1 text-secondary">
